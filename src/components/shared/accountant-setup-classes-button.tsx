@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { accountantSetupAllClasses } from "@/lib/actions/accountant-ops";
 import { Button } from "@/components/ui/button";
+import { isActionError } from "@/lib/utils";
 
 export function AccountantSetupClassesButton() {
   const [msg, setMsg] = useState<string | null>(null);
@@ -21,7 +22,7 @@ export function AccountantSetupClassesButton() {
           setErr(null);
           start(async () => {
             const res = await accountantSetupAllClasses();
-            if (res?.error) setErr(res.error);
+            if (isActionError(res)) setErr(res.error);
             else
               setMsg(
                 `Classes ready for ${res.year}: ${res.created} created, ${res.skipped} already there (Creche→JHS 3).`

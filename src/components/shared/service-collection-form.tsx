@@ -5,6 +5,7 @@ import { recordServiceCollection } from "@/lib/actions/accountant-ops";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { isActionError } from "@/lib/utils";
 
 type StudentOpt = { id: string; label: string };
 
@@ -52,7 +53,7 @@ export function ServiceCollectionForm({
         fd.set("feedingAmount", feedingAmount);
         start(async () => {
           const res = await recordServiceCollection(fd);
-          if (res?.error) setError(res.error);
+          if (isActionError(res)) setError(res.error);
           else {
             setOk(
               res?.recorded === 2

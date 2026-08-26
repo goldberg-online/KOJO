@@ -5,6 +5,7 @@ import { createAnnouncement } from "@/lib/actions/school-comms";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { isActionError } from "@/lib/utils";
 
 export function AnnouncementForm() {
   const [error, setError] = useState<string | null>(null);
@@ -21,7 +22,7 @@ export function AnnouncementForm() {
         const fd = new FormData(e.currentTarget);
         start(async () => {
           const res = await createAnnouncement(fd);
-          if (res?.error) setError(res.error);
+          if (isActionError(res)) setError(res.error);
           else {
             setOk(true);
             (e.target as HTMLFormElement).reset();

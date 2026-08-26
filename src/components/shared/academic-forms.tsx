@@ -11,6 +11,7 @@ import {
   bulkAssignTeacherSubjects,
   seedStandardClasses,
 } from "@/lib/actions/academic";
+import { isActionError } from "@/lib/utils";
 import { GHANA_CLASS_LEVELS } from "@/lib/ghana-levels";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -87,7 +88,7 @@ export function AcademicForms({ academicYears, classes, teachers, subjects }: Pr
     const fd = new FormData(form);
     startTransition(async () => {
       const res = await action(fd);
-      if (res?.error) setMsg({ type: "err", text: res.error });
+      if (isActionError(res)) setMsg({ type: "err", text: res.error });
       else {
         const extra =
           res?.created != null
@@ -388,7 +389,7 @@ export function AcademicForms({ academicYears, classes, teachers, subjects }: Pr
               selectedSubjects.forEach((id) => fd.append("subjectIds", id));
               startTransition(async () => {
                 const res = await bulkAssignTeacherSubjects(fd);
-                if (res?.error) setMsg({ type: "err", text: res.error });
+                if (isActionError(res)) setMsg({ type: "err", text: res.error });
                 else {
                   setMsg({
                     type: "ok",

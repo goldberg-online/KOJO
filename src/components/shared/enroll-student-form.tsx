@@ -6,6 +6,7 @@ import { GHANA_CLASS_LEVELS } from "@/lib/ghana-levels";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { isActionError } from "@/lib/utils";
 
 export function EnrollStudentForm({
   sections,
@@ -31,7 +32,7 @@ export function EnrollStudentForm({
     const fd = new FormData(e.currentTarget);
     startTransition(async () => {
       const res = await enrollStudent(fd);
-      if (res?.error) setError(res.error);
+      if (isActionError(res)) setError(res.error);
       else {
         setSuccessMsg(res.message || "Student enrolled.");
         setCreds({

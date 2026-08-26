@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { formatGHS } from "@/lib/currency";
+import { isActionError } from "@/lib/utils";
 
 export function SalaryForm() {
   const [gross, setGross] = useState("");
@@ -31,7 +32,7 @@ export function SalaryForm() {
         const fd = new FormData(e.currentTarget);
         start(async () => {
           const res = await recordSalary(fd);
-          if (res?.error) setError(res.error);
+          if (isActionError(res)) setError(res.error);
           else {
             setOk(
               `Saved. SSNIT ${formatGHS(res.ssnitDeduction ?? 0)} · Net ${formatGHS(res.netAmount ?? 0)}`

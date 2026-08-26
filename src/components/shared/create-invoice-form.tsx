@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { formatGHS } from "@/lib/currency";
+import { isActionError } from "@/lib/utils";
 
 type StudentOpt = { id: string; label: string };
 type YearOpt = { id: string; name: string };
@@ -50,7 +51,7 @@ export function CreateInvoiceForm({
     fd.set("studentId", studentId);
     startTransition(async () => {
       const res = await createInvoice(fd);
-      if (res?.error) setError(res.error);
+      if (isActionError(res)) setError(res.error);
       else {
         setSuccess(true);
         setStudentId("");

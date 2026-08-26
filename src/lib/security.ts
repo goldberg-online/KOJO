@@ -16,14 +16,15 @@ export function getAuthSecret(): string {
   }
 
   // Dev only — unique per process so sessions don't silently share a public string across machines
-  if (!(globalThis as { __disDevSecret?: string }).__disDevSecret) {
-    (globalThis as { __disDevSecret?: string }).__disDevSecret =
+  const g = globalThis as unknown as { __disDevSecret?: string };
+  if (!g.__disDevSecret) {
+    g.__disDevSecret =
       "dev-only-" + Math.random().toString(36).slice(2) + Date.now().toString(36);
     console.warn(
       "[security] AUTH_SECRET not set — using ephemeral dev secret. Set AUTH_SECRET before production."
     );
   }
-  return (globalThis as { __disDevSecret: string }).__disDevSecret;
+  return g.__disDevSecret;
 }
 
 type Bucket = { count: number; resetAt: number };

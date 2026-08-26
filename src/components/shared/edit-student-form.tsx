@@ -6,6 +6,7 @@ import { GHANA_CLASS_LEVELS } from "@/lib/ghana-levels";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { isActionError } from "@/lib/utils";
 
 export function EditStudentForm({
   student,
@@ -58,7 +59,7 @@ export function EditStudentForm({
         fd.set("studentId", student.id);
         start(async () => {
           const res = await updateStudentEnrollment(fd);
-          if (res?.error) setError(res.error);
+          if (isActionError(res)) setError(res.error);
           else {
             setOk(true);
             setOpen(false);

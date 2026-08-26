@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { GraduationCap } from "lucide-react";
+import { isActionError } from "@/lib/utils";
 
 export default function ForgotPasswordPage() {
   const [error, setError] = useState<string | null>(null);
@@ -44,7 +45,7 @@ export default function ForgotPasswordPage() {
             const fd = new FormData(e.currentTarget);
             start(async () => {
               const res = await requestPasswordReset(fd);
-              if (res?.error) setError(res.error);
+              if (isActionError(res)) setError(res.error);
               else {
                 setMessage(res.message || "If the account exists, a reset was issued.");
                 if ("devResetUrl" in res && res.devResetUrl) setDevUrl(res.devResetUrl as string);

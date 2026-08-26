@@ -6,6 +6,7 @@ import { FEE_FREQUENCIES } from "@/lib/terms";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { isActionError } from "@/lib/utils";
 
 type SectionOption = {
   id: string;
@@ -25,7 +26,7 @@ export function FeeStructureForm({ sections }: { sections: SectionOption[] }) {
     const fd = new FormData(e.currentTarget);
     startTransition(async () => {
       const res = await createFeeStructure(fd);
-      if (res?.error) setError(res.error);
+      if (isActionError(res)) setError(res.error);
       else {
         setSuccess(true);
         (e.target as HTMLFormElement).reset();

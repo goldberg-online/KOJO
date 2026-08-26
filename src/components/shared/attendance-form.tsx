@@ -6,6 +6,7 @@ import { saveClassAttendance } from "@/lib/actions/teacher-classes";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { isActionError } from "@/lib/utils";
 
 type Student = {
   id: string;
@@ -49,7 +50,7 @@ export function AttendanceForm({
         fd.set("classId", classId);
         start(async () => {
           const res = await saveClassAttendance(fd);
-          if (res?.error) setErr(res.error);
+          if (isActionError(res)) setErr(res.error);
           else {
             setMsg(`Attendance saved for ${res.count} student(s).`);
             router.refresh();

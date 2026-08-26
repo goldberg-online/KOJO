@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { GraduationCap } from "lucide-react";
+import { isActionError } from "@/lib/utils";
 
 function ResetForm() {
   const searchParams = useSearchParams();
@@ -54,7 +55,7 @@ function ResetForm() {
         fd.set("token", token);
         start(async () => {
           const res = await resetPasswordWithToken(fd);
-          if (res?.error) setError(res.error);
+          if (isActionError(res)) setError(res.error);
           else setDone(true);
         });
       }}

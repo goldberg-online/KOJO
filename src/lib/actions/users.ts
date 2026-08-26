@@ -92,7 +92,7 @@ export async function createUser(formData: FormData) {
       ? (formData.get("schoolId") as string) || null
       : session.user.schoolId;
 
-  if (!schoolId && data.role !== "SUPER_ADMIN") {
+  if (!schoolId) {
     return { error: "School is required" };
   }
 
@@ -117,7 +117,7 @@ export async function createUser(formData: FormData) {
     }
   }
 
-  if (data.role === "STUDENT") {
+  if ((data.role as string) === "STUDENT") {
     if (!schoolId) return { error: "School is required for students" };
     if (!studentAdmission) {
       try {
@@ -156,7 +156,7 @@ export async function createUser(formData: FormData) {
             employeeId: staffEmployeeId,
           },
         });
-      } else if (data.role === "STUDENT") {
+      } else if ((data.role as string) === "STUDENT") {
         await tx.student.create({
           data: {
             userId: user.id,

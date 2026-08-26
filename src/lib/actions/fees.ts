@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import type { Session } from "next-auth";
 import { InvoiceStatus, PaymentMethod } from "@prisma/client";
 import { formatGHS } from "@/lib/currency";
 import { buildPaymentReceiptMessage, sendSms } from "@/lib/sms";
@@ -19,7 +20,7 @@ async function requireStaff() {
   return session;
 }
 
-async function getSchoolId(session: Awaited<ReturnType<typeof auth>>) {
+async function getSchoolId(session: Session | null) {
   if (!session?.user) throw new Error("Unauthorized");
   if (session.user.role === "SUPER_ADMIN") return null;
   if (!session.user.schoolId) throw new Error("No school linked");
@@ -28,7 +29,7 @@ async function getSchoolId(session: Awaited<ReturnType<typeof auth>>) {
 
 /** Prefer session school; Super Admin falls back to first school for write ops */
 async function resolveWriteSchoolId(
-  session: Awaited<ReturnType<typeof auth>>
+  session: Session | null
 ): Promise<string | null> {
   if (!session?.user) return null;
   if (session.user.schoolId) return session.user.schoolId;

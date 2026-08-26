@@ -5,6 +5,7 @@ import { adminResetPassword } from "@/lib/actions/password";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { isActionError } from "@/lib/utils";
 
 export function AdminResetPasswordForm({
   userId,
@@ -37,7 +38,7 @@ export function AdminResetPasswordForm({
         fd.set("userId", userId);
         start(async () => {
           const res = await adminResetPassword(fd);
-          if (res?.error) setError(res.error);
+          if (isActionError(res)) setError(res.error);
           else {
             setOk(true);
             (e.target as HTMLFormElement).reset();

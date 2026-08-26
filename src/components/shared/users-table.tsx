@@ -3,6 +3,7 @@
 import { Fragment, useState, useTransition } from "react";
 import { toggleUserActive } from "@/lib/actions/users";
 import { adminResetPassword } from "@/lib/actions/password";
+import { isActionError } from "@/lib/utils";
 import {
   Table,
   TableBody,
@@ -130,7 +131,7 @@ export function UsersTable({ users }: { users: UserRow[] }) {
                             setErr((x) => ({ ...x, [u.id]: "" }));
                             setMsg((x) => ({ ...x, [u.id]: "" }));
                             const res = await adminResetPassword(fd);
-                            if (res?.error) {
+                            if (isActionError(res)) {
                               setErr((x) => ({ ...x, [u.id]: res.error || "Failed" }));
                             } else {
                               setMsg((x) => ({

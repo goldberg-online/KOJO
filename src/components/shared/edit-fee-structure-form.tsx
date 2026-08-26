@@ -5,6 +5,7 @@ import {
   updateFeeStructure,
   softDeleteFeeStructure,
 } from "@/lib/actions/fees";
+import { isActionError } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -43,7 +44,7 @@ export function EditFeeStructureForm({
         fd.set("id", id);
         start(async () => {
           const res = await updateFeeStructure(fd);
-          if (res?.error) setError(res.error);
+          if (isActionError(res)) setError(res.error);
           else setOpen(false);
         });
       }}
@@ -83,7 +84,7 @@ export function EditFeeStructureForm({
             fd.set("id", id);
             start(async () => {
               const res = await softDeleteFeeStructure(fd);
-              if (res?.error) setError(res.error);
+              if (isActionError(res)) setError(res.error);
             });
           }}
         >

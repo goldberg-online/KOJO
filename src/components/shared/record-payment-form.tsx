@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { formatGHS } from "@/lib/currency";
+import { isActionError } from "@/lib/utils";
 
 type InvoiceOpt = {
   id: string;
@@ -42,7 +43,7 @@ export function RecordPaymentForm({ invoices }: { invoices: InvoiceOpt[] }) {
     const fd = new FormData(e.currentTarget);
     startTransition(async () => {
       const res = await recordPayment(fd);
-      if (res?.error) {
+      if (isActionError(res)) {
         setError(res.error);
       } else {
         setSuccessMsg(

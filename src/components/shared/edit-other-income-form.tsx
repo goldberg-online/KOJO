@@ -5,6 +5,7 @@ import {
   updateOtherIncome,
   softDeleteOtherIncome,
 } from "@/lib/actions/accountant-ops";
+import { isActionError } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -41,7 +42,7 @@ export function EditOtherIncomeForm({
         fd.set("id", id);
         start(async () => {
           const res = await updateOtherIncome(fd);
-          if (res?.error) setError(res.error);
+          if (isActionError(res)) setError(res.error);
           else setOpen(false);
         });
       }}
@@ -76,7 +77,7 @@ export function EditOtherIncomeForm({
             fd.set("id", id);
             start(async () => {
               const res = await softDeleteOtherIncome(fd);
-              if (res?.error) setError(res.error);
+              if (isActionError(res)) setError(res.error);
             });
           }}
         >

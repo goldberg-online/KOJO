@@ -5,6 +5,7 @@ import { createExamAndEnterMark } from "@/lib/actions/teacher-marks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { isActionError } from "@/lib/utils";
 
 export function MarksEntryForm({
   subjects,
@@ -29,7 +30,7 @@ export function MarksEntryForm({
         const fd = new FormData(e.currentTarget);
         start(async () => {
           const res = await createExamAndEnterMark(fd);
-          if (res?.error) setError(res.error);
+          if (isActionError(res)) setError(res.error);
           else {
             setOk(true);
             (e.target as HTMLFormElement).reset();
