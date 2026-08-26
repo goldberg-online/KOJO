@@ -48,14 +48,31 @@ function LoginForm() {
     setServerError(null);
     setIsSubmitting(true);
     try {
-      const result = await signIn("credentials", {
-        email: data.email,
-        password: data.password,
-        redirect: false,
-      });
+      const result = await Promise.race([
+        signIn("credentials", {
+          email: data.email,
+          password: data.password,
+          redirect: false,
+          callbackUrl: "/",
+        }),
+        new Promise<{ error: string }>((resolve) =>
+          setTimeout(
+            () =>
+              resolve({
+                error:
+                  "Sign-in timed out. In Vercel set AUTH_URL and NEXTAUTH_URL to https://kojo-gamma.vercel.app (not vercel.com), check DATABASE_URL, then Redeploy.",
+              }),
+            15000
+          )
+        ),
+      ]);
 
       if (result?.error) {
-        setServerError("Invalid email or password.");
+        setServerError(
+          result.error === "CredentialsSignin"
+            ? "Invalid email or password. If this is a new database, run npm run seed on your computer first."
+            : result.error
+        );
         return;
       }
 

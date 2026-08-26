@@ -38,13 +38,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             return null;
           }
 
-          const user = await withDbRetry(() =>
-            prisma.user.findFirst({
-              where: {
-                email: { equals: email, mode: "insensitive" },
-              },
-            })
-          );
+          const user = await Promise.race([
+            withDbRetry(() =>
+              prisma.user.findFirst({
+                where: {
+                  email: { equals: email, mode: "insensitive" },
+                },
+              })
+            ),
+            new Promise<null>((_, reject) =>
+              setTimeout(
+                () => reject(new Error("Database timed out while signing in")),
+                8000
+              )
+            ),
+          ]);
 
           if (!user) {
             console.error("[auth] no user found for", email);
