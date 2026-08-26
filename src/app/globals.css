@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * DIS ONLINE theme — updated 21 Aug 2026
+ * Deep navy + gold (school crest style), soft slate backgrounds
+ */
+
+@layer base {
+  :root {
+    --background: 220 30% 97%;
+    --foreground: 222 40% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 40% 12%;
+    --primary: 222 55% 28%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 25% 93%;
+    --secondary-foreground: 222 40% 20%;
+    --muted: 220 20% 94%;
+    --muted-foreground: 220 12% 42%;
+    --accent: 42 90% 52%;
+    --accent-foreground: 30 70% 12%;
+    --destructive: 0 72% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 18% 88%;
+    --ring: 222 55% 28%;
+    --sidebar: 222 48% 14%;
+    --sidebar-foreground: 210 25% 96%;
+    --sidebar-muted: 222 40% 20%;
+    --success: 152 55% 36%;
+    --warning: 42 90% 50%;
+    --radius: 0.875rem;
+  }
+
+  .dark {
+    --background: 222 35% 7%;
+    --foreground: 210 20% 96%;
+    --card: 222 30% 11%;
+    --card-foreground: 210 20% 96%;
+    --primary: 42 90% 52%;
+    --primary-foreground: 222 40% 10%;
+    --secondary: 222 25% 16%;
+    --secondary-foreground: 210 20% 92%;
+    --muted: 222 25% 16%;
+    --muted-foreground: 215 12% 58%;
+    --accent: 42 85% 48%;
+    --accent-foreground: 30 70% 10%;
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 222 22% 18%;
+    --ring: 42 90% 52%;
+    --sidebar: 222 45% 8%;
+    --sidebar-foreground: 210 20% 94%;
+    --sidebar-muted: 222 30% 14%;
+    --success: 152 50% 40%;
+    --warning: 42 85% 48%;
+    --radius: 0.875rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.18);
+  }
+}
+
+@layer utilities {
+  .shadow-soft {
+    box-shadow:
+      0 1px 2px rgba(15, 25, 55, 0.04),
+      0 10px 28px rgba(15, 25, 55, 0.07);
+  }
+  .shadow-card {
+    box-shadow:
+      0 1px 1px rgba(15, 25, 55, 0.03),
+      0 4px 16px rgba(15, 25, 55, 0.06);
+  }
+  .gradient-hero {
+    background: linear-gradient(
+      145deg,
+      hsl(222 55% 26%) 0%,
+      hsl(230 45% 22%) 45%,
+      hsl(240 40% 16%) 100%
+    );
+  }
+  .gradient-card-green {
+    background: linear-gradient(135deg, hsl(152 40% 96%) 0%, hsl(0 0% 100%) 100%);
+  }
+  .gradient-card-amber {
+    background: linear-gradient(135deg, hsl(42 80% 95%) 0%, hsl(0 0% 100%) 100%);
+  }
+  .gradient-card-blue {
+    background: linear-gradient(135deg, hsl(222 50% 96%) 0%, hsl(0 0% 100%) 100%);
+  }
+  .gradient-card-rose {
+    background: linear-gradient(135deg, hsl(350 60% 97%) 0%, hsl(0 0% 100%) 100%);
+  }
+}

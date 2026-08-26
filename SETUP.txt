@@ -1,0 +1,43 @@
+DIS ONLINE — Doorbell International School
+Motto: Christ is our light
+
+STANDARD SETUP (no demo accounts)
+
+1. Unzip and open folder: school-management-system
+
+2. Copy .env.example to .env and edit:
+   - DATABASE_URL (Supabase connection string)
+   - AUTH_SECRET / NEXTAUTH_SECRET (long random strings)
+   - SEED_SUPERADMIN_EMAIL + SEED_SUPERADMIN_PASSWORD (your platform admin)
+   - SEED_ADMIN_EMAIL + SEED_ADMIN_PASSWORD (your school admin)
+   - SEED_SCHOOL_NAME and related school fields
+
+   Passwords must be at least 10 characters.
+   Do not use @demo.com emails.
+
+3. Install & database:
+   npm install
+   npx prisma db push
+   npm run seed
+   npm run dev
+
+4. Open http://localhost:3000/login
+
+5. Sign in with the Super Admin or School Admin emails you set in .env.
+
+6. Inside the app, create real users:
+   - Teachers, accountants, students, parents
+   - Academic years, classes, subjects, fee structures
+
+Roles
+  Super Admin   — platform-wide access
+  School Admin  — users, academic, tasks, announcements
+  Accountant    — fees, bus/feeding, expenses, salaries
+  Teacher       — marks / class tools
+  Student       — own fees, grades, attendance
+  Parent        — linked children
+
+Security
+  - Never share your .env file
+  - Change seed passwords after first login if they were temporary
+  - Use HTTPS and strong secrets in production
