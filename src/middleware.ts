@@ -4,6 +4,26 @@ import { getToken } from "next-auth/jwt";
 import { ROLE_ROUTES, roleDashboardPath } from "@/lib/role-routes";
 import { getAuthSecret } from "@/lib/security";
 
+async function readSessionToken(req: NextRequest, secret: string) {
+  const secure =
+    req.nextUrl.protocol === "https:" || process.env.VERCEL === "1";
+  const names = secure
+    ? ["__Secure-authjs.session-token", "authjs.session-token"]
+    : ["authjs.session-token", "__Secure-authjs.session-token"];
+
+  for (const cookieName of names) {
+    const token = await getToken({
+      req,
+      secret,
+      secureCookie: cookieName.startsWith("__Secure-"),
+      cookieName,
+      salt: cookieName,
+    });
+    if (token) return token;
+  }
+  return null;
+}
+
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
@@ -22,7 +42,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  const token = await getToken({ req, secret });
+  const token = await readSessionToken(req, secret);
   const isLoggedIn = !!token;
   const role = (token?.role as string | undefined) || undefined;
 
@@ -49,7 +69,6 @@ export async function middleware(req: NextRequest) {
     if (!isLoggedIn) {
       return NextResponse.redirect(new URL("/login", req.url));
     }
-    // Super admin can access every protected area
     if (role === "SUPER_ADMIN") {
       return NextResponse.next();
     }

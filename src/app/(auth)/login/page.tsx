@@ -4,7 +4,7 @@ import { useState, Suspense, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { loginSchema, type LoginInput } from "@/lib/validations/auth";
 import { GraduationCap, Shield, BookOpen, Users } from "lucide-react";
 
@@ -17,7 +17,6 @@ export default function LoginPage() {
 }
 
 function LoginForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [serverError, setServerError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -76,8 +75,8 @@ function LoginForm() {
         return;
       }
 
-      router.refresh();
-      router.push("/");
+      window.location.assign("/");
+      return;
     } catch {
       setServerError("Something went wrong. Please try again.");
     } finally {
