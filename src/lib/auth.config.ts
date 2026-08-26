@@ -7,6 +7,10 @@ config({ path: resolve(process.cwd(), ".env") });
 config({ path: resolve(process.cwd(), "prisma/.env") });
 
 export const authConfig: NextAuthConfig = {
+  // Always the Next.js route. Do not let AUTH_URL/NEXTAUTH_URL path override this
+  // (e.g. a value of https://….vercel.app/login would break every /api/auth/* call with 400).
+  basePath: "/api/auth",
+  trustHost: true,
   session: {
     strategy: "jwt",
     maxAge: 8 * 60 * 60, // 8 hours
@@ -34,6 +38,5 @@ export const authConfig: NextAuthConfig = {
       return session;
     },
   },
-  trustHost: true,
   secret: getAuthSecret(),
 };

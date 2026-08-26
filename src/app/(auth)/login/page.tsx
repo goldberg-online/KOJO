@@ -1,17 +1,40 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { loginSchema, type LoginInput } from "@/lib/validations/auth";
 import { GraduationCap, Shield, BookOpen, Users } from "lucide-react";
 
 export default function LoginPage() {
+  return (
+    <Suspense fallback={<p className="p-8 text-sm text-muted-foreground">Loading…</p>}>
+      <LoginForm />
+    </Suspense>
+  );
+}
+
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [serverError, setServerError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    const err = searchParams.get("error");
+    if (!err) return;
+    if (err === "Configuration") {
+      setServerError(
+        "Sign-in is not configured. In Vercel set AUTH_URL and NEXTAUTH_URL to https://kojo-gamma.vercel.app (no extra path) and AUTH_SECRET to a long random string, then Redeploy."
+      );
+    } else if (err === "CredentialsSignin") {
+      setServerError("Invalid email or password.");
+    } else {
+      setServerError("Could not sign in. Open /login and try again.");
+    }
+  }, [searchParams]);
 
   const {
     register,
